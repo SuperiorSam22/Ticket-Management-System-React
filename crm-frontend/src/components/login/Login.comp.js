@@ -1,129 +1,227 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-	Container,
-	Row,
-	Col,
-	Form,
-	Button,
-	Spinner,
-	Alert,
-} from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {  useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { loginPending, loginSuccess, loginFail } from "./loginSlice";
 import { userLogin } from "../../api/userApi";
 import { getUserProfile } from "../../pages/dashboard/userAction";
+import {
+  alpha,
+  Button,
+  Box,
+  Divider,
+  FormControl,
+  InputBase,
+  InputLabel,
+  styled,
+  Typography,
+} from "@mui/material";
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  "label + &": {
+    marginTop: theme.spacing(3),
+  },
+  "& .MuiInputBase-input": {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.mode === "light" ? "#F3F6F9" : "#1A2027",
+    border: "1px solid",
+    borderColor: theme.palette.mode === "light" ? "#E0E3E7" : "#2D3843",
+    fontSize: 14,
+    width: "100%",
+    padding: "10px 12px",
+    transition: theme.transitions.create([
+      "border-color",
+      "background-color",
+      "box-shadow",
+    ]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+      borderColor: theme.palette.primary.main,
+    },
+  },
+}));
 
 export const LoginForm = ({ formSwitcher }) => {
-	const dispatch = useDispatch();
-	const history = useNavigate();
-	let location = useLocation();
+  const dispatch = useDispatch();
+  const history = useNavigate();
+  let location = useLocation();
+  const navigate = useNavigate();
 
-	const { isLoading, isAuth, error } = useSelector(state => state.login);
-	let { from } = location.state || { from: { pathname: "/" } };
+  const { isLoading, isAuth, error } = useSelector((state) => state.login);
+  let { from } = location.state || { from: { pathname: "/" } };
 
-	useEffect(() => {
-		sessionStorage.getItem("accessJWT") && history(from);
-	}, [history, isAuth]);
+  useEffect(() => {
+    sessionStorage.getItem("accessJWT") && history(from);
+  }, [history, isAuth]);
 
-	const [email, setEmail] = useState("e2@e.com");
-	const [password, setPassword] = useState("password#1F");
+  const [email, setEmail] = useState("e2@e.com");
+  const [password, setPassword] = useState("password#1F");
 
-	const handleOnChange = e => {
-		const { name, value } = e.target;
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
 
-		switch (name) {
-			case "email":
-				setEmail(value);
-				break;
+    switch (name) {
+      case "email":
+        setEmail(value);
+        break;
 
-			case "password":
-				setPassword(value);
-				break;
+      case "password":
+        setPassword(value);
+        break;
 
-			default:
-				break;
-		}
-	};
+      default:
+        break;
+    }
+  };
 
-	const handleOnSubmit = async e => {
-		e.preventDefault();
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
 
-		if (!email || !password) {
-			return alert("Fill up all the form!");
-		}
+    if (!email || !password) {
+      return alert("Fill up all the form!");
+    }
 
-		dispatch(loginPending());
+    dispatch(loginPending());
 
-		try {
-			const isAuth = await userLogin({ email, password });
+    try {
+      const isAuth = await userLogin({ email, password });
 
-			if (isAuth.status === "error") {
-				return dispatch(loginFail(isAuth.message));
-			}
+      if (isAuth.status === "error") {
+        return dispatch(loginFail(isAuth.message));
+      }
 
-			dispatch(loginSuccess());
-			dispatch(getUserProfile());
-			history.push("/dashboard");
-		} catch (error) {
-			dispatch(loginFail(error.message));
-		}
-	};
+      dispatch(loginSuccess());
+      dispatch(getUserProfile());
+      history.push("/dashboard");
+    } catch (error) {
+      dispatch(loginFail(error.message));
+    }
+  };
 
-	return (
-		<Container>
-			<Row>
-				<Col>
-					<h1 className="text-info text-center">Client Login</h1>
-					<hr />
-					{error && <Alert variant="danger">{error}</Alert>}
-					<Form autoComplete="off" onSubmit={handleOnSubmit}>
-						<Form.Group>
-							<Form.Label>Email Address</Form.Label>
-							<Form.Control
-								type="email"
-								name="email"
-								value={email}
-								onChange={handleOnChange}
-								placeholder="Enter Email"
-								required
-							/>
-						</Form.Group>
-						<Form.Group>
-							<Form.Label>Password</Form.Label>
-							<Form.Control
-								type="password"
-								name="password"
-								onChange={handleOnChange}
-								value={password}
-								placeholder="password"
-								required
-							/>
-						</Form.Group>
+  const signIn = () => {
+    navigate("/registration");
+  };
 
-						<Button type="submit">Login</Button>
-						{isLoading && <Spinner variant="primary" animation="border" />}
-					</Form>
-					<hr />
-				</Col>
-			</Row>
+  return (
+    <>
+      <Box className="auth-box">
+        <h2>Welcome Back !</h2>
+        {error && <Alert variant="danger">{error}</Alert>}
+        <form onSubmit={handleOnSubmit}>
+          <Box className="input-fields" mt={5}>
+            <FormControl variant="standard">
+              <InputLabel shrink htmlFor="bootstrap-input">
+                Email
+              </InputLabel>
+              <BootstrapInput
+                id="bootstrap-input"
+                name="email"
+                onChange={handleOnChange}
+              />
+            </FormControl>
+            <FormControl variant="standard">
+              <InputLabel shrink htmlFor="bootstrap-input">
+                Password
+              </InputLabel>
+              <BootstrapInput
+                id="bootstrap-input"
+                name="password"
+                onChange={handleOnChange}
+              />
+            </FormControl>
+            <Button
+              variant="outlined"
+              type="submit"
+              size="small"
+              className="login-btn"
+            >
+              {isLoading ? (
+                <Spinner variant="primary" animation="border" />
+              ) : (
+                "Sign In"
+              )}
+            </Button>
+            <Divider>or</Divider>
+            <Typography
+              style={{ cursor: "pointer", color:"#1976d2" }}
+              onClick={() => navigate("/password-reset")}
+            >
+              Forget Password
+            </Typography>
+            <Typography>
+              Don't Have an account? <span onClick={signIn}>Sign Up</span>
+            </Typography>
+          </Box>
+        </form>
+      </Box>
+      {/* <Container>
+        <Row>
+          <Col>
+            <h1 className="text-info text-center">Client Login</h1>
+            <hr />
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form autoComplete="off" onSubmit={handleOnSubmit}>
+              <Form.Group>
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={handleOnChange}
+                  placeholder="Enter Email"
+                  required
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  onChange={handleOnChange}
+                  value={password}
+                  placeholder="password"
+                  required
+                />
+              </Form.Group>
 
-			<Row>
-				<Col>
-					<a href="/password-reset">Forget Password?</a>
-				</Col>
-			</Row>
-			<Row className="py-4">
-				<Col>
-					Are you new here? <a href="/registration">Register Now</a>
-				</Col>
-			</Row>
-		</Container>
-	);
+              <Button type="submit">Login</Button>
+              {isLoading && <Spinner variant="primary" animation="border" />}
+            </Form>
+            <hr />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <a href="/password-reset">Forget Password?</a>
+          </Col>
+        </Row>
+        <Row className="py-4">
+          <Col>
+            Are you new here? <a href="/registration">Register Now</a>
+          </Col>
+        </Row>
+      </Container> */}
+    </>
+  );
 };
 
 LoginForm.propTypes = {
-	formSwitcher: PropTypes.func.isRequired,
+  formSwitcher: PropTypes.func.isRequired,
 };

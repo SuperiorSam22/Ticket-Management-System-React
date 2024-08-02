@@ -49,3 +49,4 @@ footer {
 @import "./styles/header.scss";
 @import "./styles/board.scss";
 @import "./styles/accordion.scss";
+@import "./styles/login.scss";

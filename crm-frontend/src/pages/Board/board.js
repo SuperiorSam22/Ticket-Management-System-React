@@ -43,7 +43,7 @@ function Board() {
       detail: "Integrate Api of Admin page for updating data.",
       priority: "High",
       status: "Open",
-      priorityColor: "#f9b062",
+      priorityColor: "#ff9b9b",
       statueColor: "#ffd19f",
     },
     {
@@ -141,7 +141,7 @@ function Board() {
                 Priority :{" "}
                 <span
                   onBlur={() => setPopperOpen(false)}
-                  onClick={handleClick("bottom`")}
+                  onClick={handleClick("bottom")}
                 >
                   {priority}
                 </span>
