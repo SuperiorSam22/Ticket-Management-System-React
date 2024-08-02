@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
-  Jumbotron,
+  // Jumbotron,
   Row,
   Col,
   Button,
@@ -19,7 +19,8 @@ const initialFrmDt = {
   subject: "",
   issueDate: "",
   message: "",
-  severity: "Low",  // Default value for severity
+  severity: "Low",// Default value for severity
+  image: null, 
 };
 const initialFrmError = {
   subject: false,
@@ -37,7 +38,7 @@ export const AddTicketForm = () => {
   const { isLoading, error, successMsg } = useSelector(
     (state) => state.openTicket
   );
-
+  const [image, setImage] = useState(null);
   const [frmData, setFrmData] = useState(initialFrmDt);
   const [frmDataErro, setFrmDataErro] = useState(initialFrmError);
 
@@ -49,30 +50,40 @@ export const AddTicketForm = () => {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-
+    
     setFrmData({
       ...frmData,
       [name]: value,
+      'image': image
     });
   };
+
+  const handleOnFileChange = (e) => {
+    setFrmData({
+      ...frmData,
+      image: e.target.files[0],
+    });
+  };
+
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
-    setFrmDataErro(initialFrmError);
+    // setFrmDataErro(initialFrmError);
 
-    const isSubjectValid = await shortText(frmData.subject);
+    // const isSubjectValid = await shortText(frmData.subject);
 
-    setFrmDataErro({
-      ...initialFrmError,
-      subject: !isSubjectValid,
-    });
-
+    // setFrmDataErro({
+    //   ...initialFrmError,
+    //   subject: !isSubjectValid,
+    // });
+    console.log(image)
     dispatch(openNewTicket({ ...frmData, sender: name }));
   };
 
   return (
-    <Jumbotron className="mt-3 add-new-ticket bg-light">
+    // <Jumbotron className="mt-3 add-new-ticket bg-light">
+    <>
       <h1 className="text-info text-center">Add New Ticket</h1>
       <hr />
       <div>
@@ -143,11 +154,21 @@ export const AddTicketForm = () => {
             </Form.Control>
           </Col>
         </Form.Group>
-        <Button type="submit" variant="info" block>
+          <div className="form-group">
+          <label htmlFor="image">Attach Image</label>
+          <input
+            type="file"
+            id="image"
+            className="form-control"
+            onChange={handleOnFileChange}
+          />
+        </div>
+        <Button type="submit" variant="info" block style={{marginTop:"10px"}}>
           Open Ticket
         </Button>
       </Form>
-    </Jumbotron>
+      </>
+    // </Jumbotron>
   );
 };
 

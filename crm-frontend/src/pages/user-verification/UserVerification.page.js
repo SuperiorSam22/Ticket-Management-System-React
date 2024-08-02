@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Jumbotron, Spinner, Alert } from "react-bootstrap";
+import {  Spinner, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 import { userRegistrationVerification } from "../../api/userApi";
@@ -30,7 +30,7 @@ export const UserVerification = () => {
   return (
     <div className="registration-page bg-info">
       <div className="mt-5">
-        <Jumbotron className="form-box">
+        {/* <Jumbotron className="form-box"> */}
           {!response.status && <Spinner variant="info" animation="border" />}
 
           {response.status && (
@@ -40,7 +40,7 @@ export const UserVerification = () => {
               {response.message}
             </Alert>
           )}
-        </Jumbotron>
+        {/* </Jumbotron> */}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Route, Redirect } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { loginSuccess } from "../login/loginSlice";
 import { getUserProfile } from "../../pages/dashboard/userAction";
 
@@ -8,8 +8,8 @@ import { fetchNewAccessJWT } from "../../api/userApi";
 
 import { DefaultLayout } from "../../layout/DefaultLayout";
 
-export const PrivateRoute = ({ children, ...rest }) => {
-	const dispatch = useDispatch();
+export const PrivateRoute = () => {
+  const dispatch = useDispatch();
 	const { isAuth } = useSelector(state => state.login);
 	const { user } = useSelector(state => state.user);
 
@@ -28,21 +28,11 @@ export const PrivateRoute = ({ children, ...rest }) => {
 		!isAuth && sessionStorage.getItem("accessJWT") && dispatch(loginSuccess());
 	}, [dispatch, isAuth, user._id]);
 
-	return (
-		<Route
-			{...rest}
-			render={({ location }) =>
-				isAuth ? (
-					<DefaultLayout>{children}</DefaultLayout>
-				) : (
-					<Redirect
-						to={{
-							pathname: "/",
-							state: { from: location },
-						}}
-					/>
-				)
-			}
-		/>
-	);
+  return isAuth ? (
+    <DefaultLayout>
+      <Outlet />
+    </DefaultLayout>
+  ) : (
+    <Navigate to={"/"} />
+  );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Jumbotron } from "react-bootstrap";
+// import { Jumbotron } from "react-bootstrap";
 import { LoginForm } from "../../components/login/Login.comp";
 import { ResetPassword } from "../../components/password-reset/PasswordReset.comp";
 
@@ -31,7 +31,7 @@ export const Entry = () => {
 
 	return (
 		<div className="entry-page bg-info">
-			<Jumbotron className="form-box">
+			{/* <Jumbotron className="form-box"> */}
 				{frmLoad === "login" && <LoginForm formSwitcher={formSwitcher} />}
 
 				{frmLoad === "rest" && (
@@ -42,7 +42,7 @@ export const Entry = () => {
 						// email={email}
 					/>
 				)}
-			</Jumbotron>
+			{/* </Jumbotron> */}
 		</div>
 	);
 };
