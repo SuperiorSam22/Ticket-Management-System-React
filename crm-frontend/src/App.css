@@ -7,6 +7,27 @@
     "footer";
 }
 
+.App {
+  min-height: 100vh;
+  display: grid;
+  /* background: #f5f5f5; */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  font-family: "Mulish", sans-serif;
+  margin-top: 0 !important;
+  margin-bottom: 0.5px !important;
+}
+
 header {
   grid-area: header;
 }
@@ -22,3 +43,9 @@ footer {
   padding: 1rem;
   color: white;
 }
+
+@import "./styles/dashboardLayout.scss";
+@import "./styles/dashboard.scss";
+@import "./styles/header.scss";
+@import "./styles/board.scss";
+@import "./styles/accordion.scss";

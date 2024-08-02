@@ -24,6 +24,64 @@ const newTicketSlice = createSlice({
       state.isLoading = true;
       state.successMsg = "";
     },
+    fetchSingleTicketPending: (state) => {
+      state.isLoading = true;
+    },
+    fetchSingleTicketSuccess: (state, { payload }) => {
+      state.isLoading = false;
+      state.selectedTicket = payload;
+      state.error = "";
+    },
+    fetchSingleTicketFail: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    },
+    replyTicketPending: (state) => {
+      state.isLoading = true;
+    },
+    replyTicketSuccess: (state, { payload }) => {
+      state.isLoading = false;
+      state.replyMsg = payload;
+      state.replyTicketError = "";
+    },
+    replyTicketFail: (state, { payload }) => {
+      state.isLoading = false;
+      state.replyTicketError = payload;
+    },
+    closeTicketPending: (state) => {
+      state.isLoading = true;
+    },
+    closeTicketSuccess: (state, { payload }) => {
+      state.isLoading = false;
+      state.successMsg = payload;
+      state.error = "";
+      if (state.selectedTicket) {
+        state.selectedTicket.status = "Closed";
+      }
+    },
+    closeTicketFail: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    },
+    deleteTicketPending: (state) => {
+      state.isLoading = true;
+    },
+    deleteTicketSuccess: (state, { payload }) => {
+      state.isLoading = false;
+      state.successMsg = payload;
+      state.error = "";
+    },
+    deleteTicketFail: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    },
+    resetResponseMsg: (state) => {
+      state.isLoading = false;
+      state.successMsg = "";
+      state.error = "";
+      state.replyMsg = "";
+      state.replyTicketError = "";
+    },
   },
 });
 
@@ -32,5 +90,18 @@ export const {
   openNewTicketSuccess,
   openNewTicketFail,
   restSuccessMSg,
+  fetchSingleTicketPending,
+  fetchSingleTicketSuccess,
+  fetchSingleTicketFail,
+  replyTicketPending,
+  replyTicketSuccess,
+  replyTicketFail,
+  closeTicketPending,
+  closeTicketSuccess,
+  closeTicketFail,
+  deleteTicketPending,
+  deleteTicketSuccess,
+  deleteTicketFail,
+  resetResponseMsg,
 } = newTicketSlice.actions;
 export default newTicketSlice.reducer;

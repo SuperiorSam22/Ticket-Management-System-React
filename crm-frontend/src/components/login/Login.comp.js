@@ -10,7 +10,7 @@ import {
 	Alert,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 
 import { loginPending, loginSuccess, loginFail } from "./loginSlice";
 import { userLogin } from "../../api/userApi";
@@ -18,14 +18,14 @@ import { getUserProfile } from "../../pages/dashboard/userAction";
 
 export const LoginForm = ({ formSwitcher }) => {
 	const dispatch = useDispatch();
-	const history = useHistory();
+	const history = useNavigate();
 	let location = useLocation();
 
 	const { isLoading, isAuth, error } = useSelector(state => state.login);
 	let { from } = location.state || { from: { pathname: "/" } };
 
 	useEffect(() => {
-		sessionStorage.getItem("accessJWT") && history.replace(from);
+		sessionStorage.getItem("accessJWT") && history(from);
 	}, [history, isAuth]);
 
 	const [email, setEmail] = useState("e2@e.com");

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import { PrivateRoute } from "./components/private-route/PrivateRoute.comp";
@@ -12,45 +12,39 @@ import { Registration } from "./pages/registration/Registration.page";
 import { AddTicket } from "./pages/new-ticket/AddTicket.page";
 import { TicketLists } from "./pages/ticket-list/TicketLists.page";
 import { Ticket } from "./pages/ticket/Ticket.page";
+import Board from "./pages/Board/board";
 
 function App() {
-	return (
-		<div className="App">
-			<Router>
-				<Switch>
-					<Route exact path="/">
-						<Entry />
-					</Route>
-					<Route exact path="/registration">
-						<Registration />
-					</Route>
-					<Route exact path="/password-reset">
-						<PasswordOtpForm />
-					</Route>
-					<Route exact path="/verification/:_id/:email">
-						<UserVerification />
-					</Route>
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Entry />} />
+          <Route exact path="/registration" element={<Registration />} />
 
-					<PrivateRoute exact path="/dashboard">
-						<Dashboard />
-					</PrivateRoute>
-					<PrivateRoute exact path="/add-ticket">
-						<AddTicket />
-					</PrivateRoute>
-					<PrivateRoute exact path="/ticket/:tId">
-						<Ticket />
-					</PrivateRoute>
-					<PrivateRoute exact path="/tickets">
-						<TicketLists />
-					</PrivateRoute>
+          <Route exact path="/password-reset" element={<PasswordOtpForm />} />
 
-					<Route path="*">
-						<h1>404 Page not found</h1>
-					</Route>
-				</Switch>
-			</Router>
-		</div>
-	);
+          <Route
+            exact
+            path="/verification/:_id/:email"
+            element={<UserVerification />}
+          />
+
+          <Route exact path="/" element={<PrivateRoute />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="board" element={<Board />} />
+            <Route path="add-ticket" element={<AddTicket />} />
+            <Route path="ticket/:tId" element={<Ticket />} />
+            <Route path="ticket" element={<TicketLists />} />
+          </Route>
+
+          {/* <Route path="*">
+            <h1>404 Page not found</h1>
+          </Route> */}
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

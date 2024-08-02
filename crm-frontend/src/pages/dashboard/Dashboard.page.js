@@ -7,10 +7,24 @@ import { PageBreadcrumb } from "../../components/breadcrumb/Breadcrumb.comp";
 import { Link } from "react-router-dom";
 
 import { fetchAllTickets } from "../ticket-list/ticketsAction";
+import { Box, Divider, Grid } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import SearchBar from "../../components/search/search";
+import PieChart from "../../components/charts/PieChart";
+import Header from "../../components/header/header";
+import CustomAccordions from "../../components/Accordion/Accordion";
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
   const { tickets } = useSelector((state) => state.tickets);
+
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   useEffect(() => {
     if (!tickets.length) {
@@ -21,40 +35,70 @@ export const Dashboard = () => {
   const pendingTickets = tickets.filter((row) => row.status !== "Closed");
   const totlatTickets = tickets.length;
   return (
-    <Container>
-      <Row>
-        <Col>
-          <PageBreadcrumb page="Dashboard" />
-        </Col>
-      </Row>
-      <Row>
-        <Col className="text-center mt-5 mb-2">
-          <Link to="/add-ticket">
-            <Button
-              variant="info"
-              style={{ fontSize: "2rem", padding: "10px 30px" }}
-            >
-              Add New Ticket
-            </Button>
-          </Link>
-        </Col>
-      </Row>
-      <Row>
-        <Col className="text-center  mb-2">
-          <div>Total tickets: {totlatTickets}</div>
-          <div>Pending tickets: {pendingTickets.length}</div>
-        </Col>
-      </Row>
-      <Row>
-        <Col className="mt-2">Recently Added tickets</Col>
-      </Row>
-      <hr />
+    <div className="main-dashboard">
+      <Header />
+      <Divider />
+      <Box className="content">
+        <h2>Dashboard</h2>
+        <Box mt={3} className="section1">
+          <p className="heading">Active projects</p>
+          <Grid container spacing={3}>
+            <Grid item sm={8} md={8}>
+              <CustomAccordions
+                expanded={expanded}
+                handleChange={handleChange}
+              />
+            </Grid>
+            <Grid item sm={4} md={4}>
+              <Box className="chart-box">
+                {expanded ? (
+                  <PieChart />
+                ) : (
+                  <Box sx={{ p: 4 }}>
+                    <QueryStatsIcon className="stats-icon"/>
+                    <p>Selecet project to view it's stats</p>
+                  </Box>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      {/* <Container>
+        <Row>
+          <Col>
+            <PageBreadcrumb page="Dashboard" />
+          </Col>
+        </Row>
+        <Row>
+          <Col className="text-center mt-5 mb-2">
+            <Link to="/add-ticket">
+              <Button
+                variant="info"
+                style={{ fontSize: "2rem", padding: "10px 30px" }}
+              >
+                Add New Ticket
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="text-center  mb-2">
+            <div>Total tickets: {totlatTickets}</div>
+            <div>Pending tickets: {pendingTickets.length}</div>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="mt-2">Recently Added tickets</Col>
+        </Row>
+        <hr />
 
-      <Row>
-        <Col className="recent-ticket">
-          <TicketTable tickets={tickets} />
-        </Col>
-      </Row>
-    </Container>
+        <Row>
+          <Col className="recent-ticket">
+            <TicketTable tickets={tickets} />
+          </Col>
+        </Row>
+      </Container> */}
+    </div>
   );
 };
