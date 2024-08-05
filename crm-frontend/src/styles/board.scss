@@ -33,7 +33,7 @@
         }
       }
     }
-    .filter-section, .assigne-filter{
+    .filter-section, .assigne-filter, .view-toggle, .toggle-button{
       display: flex;
       align-items: center;
     }
@@ -54,6 +54,25 @@
       .assigne-filter{
         p{
           font-size: 14px;
+        }
+      }
+
+      .view-toggle{
+        cursor: pointer;
+        gap: 30px;
+        margin-right: 20px;
+        .toggle-button{
+          gap: 5px;
+        
+            color: #707070;
+          
+        }
+
+        .selected{
+          border-bottom: 2px solid #de8628;
+          p{
+            color: #de8628;
+          }
         }
       }
     }

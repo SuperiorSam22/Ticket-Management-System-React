@@ -64,41 +64,6 @@ export const Dashboard = () => {
           </Grid>
         </Box>
       </Box>
-      {/* <Container>
-        <Row>
-          <Col>
-            <PageBreadcrumb page="Dashboard" />
-          </Col>
-        </Row>
-        <Row>
-          <Col className="text-center mt-5 mb-2">
-            <Link to="/add-ticket">
-              <Button
-                variant="info"
-                style={{ fontSize: "2rem", padding: "10px 30px" }}
-              >
-                Add New Ticket
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col className="text-center  mb-2">
-            <div>Total tickets: {totlatTickets}</div>
-            <div>Pending tickets: {pendingTickets.length}</div>
-          </Col>
-        </Row>
-        <Row>
-          <Col className="mt-2">Recently Added tickets</Col>
-        </Row>
-        <hr />
-
-        <Row>
-          <Col className="recent-ticket">
-            <TicketTable tickets={tickets} />
-          </Col>
-        </Row>
-      </Container> */}
     </div>
   );
 };

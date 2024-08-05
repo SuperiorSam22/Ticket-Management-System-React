@@ -15,6 +15,10 @@ import AddTaskModal from "../../components/AddTaskModal/modal";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import BoardView from "../../components/board/boardView";
+import ListView from "../../components/board/listView";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import GridViewIcon from "@mui/icons-material/GridView";
 
 function Board() {
   const [open, setOpen] = React.useState(false);
@@ -23,6 +27,8 @@ function Board() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popperOpen, setPopperOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState();
+
+  const [toggleView, setToggleView] = useState("List");
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,7 +40,11 @@ function Board() {
   const handleClose = () => setOpen(false);
   const handlePriority = (value) => {
     setPriority(value);
-    setPopperOpen(false)
+    setPopperOpen(false);
+  };
+
+  const handleToggleView = (view) => {
+    setToggleView(view);
   };
 
   const todoList = [
@@ -136,6 +146,30 @@ function Board() {
             </p>
           </Box>
           <Box className="filter-section">
+            <Box className="view-toggle">
+              <Box
+                className={`${toggleView === "List" ? "selected" : ""}`}
+                onClick={() => handleToggleView("List")}
+              >
+                <p className="toggle-button">
+                  <span>
+                    <FormatListBulletedIcon />
+                  </span>
+                  List
+                </p>
+              </Box>
+              <Box
+                className={`${toggleView === "Board" ? "selected" : ""}`}
+                onClick={() => handleToggleView("Board")}
+              >
+                <p className="toggle-button">
+                  <span>
+                    <GridViewIcon />
+                  </span>
+                  Board
+                </p>
+              </Box>
+            </Box>
             <Box className="priority-filter">
               <p>
                 Priority :{" "}
@@ -150,7 +184,7 @@ function Board() {
                 </span>
               </p>
               <Popper
-                sx={{ zIndex: 1200, width:"200px", padding:"10px" }}
+                sx={{ zIndex: 1200, width: "200px", padding: "10px" }}
                 open={popperOpen}
                 anchorEl={anchorEl}
                 placement={placement}
@@ -158,14 +192,14 @@ function Board() {
               >
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
-                    <Paper sx={{padding:"10px"}}>
+                    <Paper sx={{ padding: "10px" }}>
                       <Box onClick={() => handlePriority("High")}>
                         <p>High</p>
-                        <Divider/>
+                        <Divider />
                       </Box>
                       <Box onClick={() => handlePriority("Medium")}>
                         <p>Medium</p>
-                        <Divider/>
+                        <Divider />
                       </Box>
                       <Box onClick={() => handlePriority("Low")}>
                         <p>Low</p>
@@ -181,133 +215,16 @@ function Board() {
             </Box>
           </Box>
         </Box>
-        <Box className="board task-container" mt={4}>
-          <Grid container spacing={3}>
-            <Grid item sm={4}>
-              <Box className="task-grid">
-                <Box className="task-header">
-                  <p>To do</p>
-                  <Box>
-                    <AddIcon />
-                  </Box>
-                </Box>
-                {todoList
-                  .filter((list) =>
-                    priority && priority !== "Select"
-                      ? list.priority === priority
-                      : list
-                  )
-                  .map((list) => {
-                    return (
-                      <Box className="task-card" draggable>
-                        <p className="title">{list.title}</p>
-                        <p className="detail">{list.detail}</p>
-                        <Box className="card-footer" mt={2}>
-                          <Box className="assigne">
-                            <Box className="avatar"></Box>
-                          </Box>
-                          <Box
-                            className="priority"
-                            sx={{ background: list.priorityColor }}
-                          >
-                            <p>{list.priority}</p>
-                          </Box>
-                          <Box
-                            className="status"
-                            sx={{ background: list.statueColor }}
-                          >
-                            <p>{list.status}</p>{" "}
-                          </Box>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-              </Box>
-            </Grid>
-            <Grid item sm={4}>
-              <Box className="task-grid">
-                <Box className="task-header">
-                  <p>In progress</p>
-                  <Box>
-                    <AddIcon />
-                  </Box>
-                </Box>
-                {inprogressList
-                  .filter((list) =>
-                    priority && priority !== "Select"
-                      ? list.priority === priority
-                      : list
-                  )
-                  .map((list) => {
-                    return (
-                      <Box className="task-card" draggable>
-                        <p className="title">{list.title}</p>
-                        <p className="detail">{list.detail}</p>
-                        <Box className="card-footer" mt={2}>
-                          <Box className="assigne">
-                            <Box className="avatar"></Box>
-                          </Box>
-                          <Box
-                            className="priority"
-                            sx={{ background: list.priorityColor }}
-                          >
-                            <p>{list.priority}</p>
-                          </Box>
-                          <Box
-                            className="status"
-                            sx={{ background: list.statueColor }}
-                          >
-                            <p>{list.status}</p>{" "}
-                          </Box>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-              </Box>
-            </Grid>
-            <Grid item sm={4}>
-              <Box className="task-grid">
-                <Box className="task-header">
-                  <p>Completed</p>
-                  <Box>
-                    <AddIcon />
-                  </Box>
-                </Box>
-                {completedList
-                  .filter((list) =>
-                    priority && priority !== "Select"
-                      ? list.priority === priority
-                      : list
-                  )
-                  .map((list) => {
-                    return (
-                      <Box className="task-card" draggable>
-                        <p className="title">{list.title}</p>
-                        <p className="detail">{list.detail}</p>
-                        <Box className="card-footer" mt={2}>
-                          <Box className="assigne">
-                            <Box className="avatar"></Box>
-                          </Box>
-                          <Box
-                            className="priority"
-                            sx={{ background: list.priorityColor }}
-                          >
-                            <p>{list.priority}</p>
-                          </Box>
-                          <Box
-                            className="status"
-                            sx={{ background: list.statueColor }}
-                          >
-                            <p>{list.status}</p>{" "}
-                          </Box>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
+        {toggleView === "Board" ? (
+          <BoardView
+            todoList={todoList}
+            inprogressList={inprogressList}
+            completedList={completedList}
+            priority={priority}
+          />
+        ) : (
+          <ListView />
+        )}
       </Box>
       <AddTaskModal
         open={open}
